@@ -1,11 +1,15 @@
 import click
 import os
 import sys
-from helper import is_utf8
 
-@click.group()
-def cli():
-    pass
+def is_utf8(filename):
+    """Check if a file is UTF-8 encoded."""
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            f.read()
+        return True
+    except UnicodeDecodeError:
+        return False
 
 @click.command()
 @click.option('-c', is_flag=True, help="outputs the number of bytes in a file")
@@ -49,7 +53,5 @@ def wc(c, l, w, m, file):
         # Print the formatted output with optional file
         print(" ".join(output_parts), file if file else "")
 
-cli.add_command(wc)
-
 if __name__ == '__main__':
-    cli()
+    wc()
